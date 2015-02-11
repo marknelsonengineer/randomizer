@@ -1,3 +1,15 @@
+/**
+ * This class defines methods for computing pseudo-random numbers.
+ * It maintains the state variable that needs to be maintained for use by those methods.
+ *
+ * The three constants are carefully from the book "Numerical Recipes in C".
+ *
+ * @author Mark Nelson
+ * @since 5.0
+ * @see "Java in a Nutshell"
+ * @see "Numerical Recipes in C".
+ */
+
 // This example is from _Java Examples in a Nutshell_. (http://www.oreilly.com)
 // Copyright (c) 1997 by David Flanagan
 // This example is provided WITHOUT ANY WARRANTY either expressed or implied.
@@ -5,50 +17,66 @@
 // For any commercial use, see http://www.davidflanagan.com/javaexamples
 
 /**
- * This class defines methods for computing pseudo-random numbers, and it defines
- * the state variable that needs to be maintained for use by those methods.
- **/
+ * Demonstrate methods for computing pseudo-random numbers.
+ */
 public class Randomizer {
-    // Carefully chosen constants from the book "Numerical Recipes in C".
-    // All "static final" fields are constants.
-    static final int m = 233280;  // the "modulus"
-    static final int a = 9301;    // the "multiplier"
-    static final int c = 49297;   // the "increment"
+  // Carefully chosen constants from the book "Numerical Recipes in C".
+  static final int MODULUS = 233280;   // The "modulus".
+  static final int MULTIPLIER = 9301;  // The "multiplier".
+  static final int INCREMENT = 49297;  // The "increment".
 
-    // The state variable maintained by each Randomizer instance
-    long seed = 1;
+  /**
+   * The state variable maintained by each Randomizer instance.
+   */
+  long seed = 1;
 
   /**
    * The constructor for the Randomizer() class.  It must be passed some
    * arbitrary initial value or "seed" for its pseudo-randomness.
-   **/
-  public Randomizer(long seed) { this.seed = seed; }
+   *
+   * @param seed Arbitrary initial value for the RNG.
+   */
+  public Randomizer(long seed) {
+    this.seed = seed;
+  }
 
   /**
-   * This method computes a pseudo-random number between 0 and 1 using a very
-   * simple algorithm.  Math.random() and java.util.Random are actually a lot
-   * better at computing randomness.
-   **/
+   * Compute a pseudo-random float between 0 and 1.
+   *
+   * @return A random floating point number based on MULTIPLIER, INCREMENT, MODULUS and seed.
+   */
+  // Math.random() and java.util.Random are actually a lot better at computing randomness.
   public float randomFloat() {
-      seed = (seed * a + c) % m; return (float)seed/(float)m;
+    seed = (seed * MULTIPLIER + INCREMENT) % MODULUS;
+    return (float) seed / (float) MODULUS;
   }
 
   /**
-   * This method computes a pseudo-random integer between 0 and specified
-   * maximum.  It uses randomFloat() above.
-   **/
+   * Compute a pseudo-random integer between 0 and max.
+   *
+   * @param max Maximum random number.
+   *
+   * @return A random integer between 0 and max (inclusive).
+   */
   public int randomInt(int max) {
-      return Math.round(max * randomFloat());
+    return Math.round(max * randomFloat());
   }
 
   /**
-   * This nested class is a simple test program: it prints 10 random integers.
-   * Note how the Randomizer object is seeded using the current time.
-   **/
+   * A simple test program: It prints 10 random integers.
+   */
+  // Note how the Randomizer object is seeded using the current time.
   public static class Test {
-      public static void main(String[] args) {
-        Randomizer r = new Randomizer(new java.util.Date().getTime());
-        for(int i = 0; i < 10; i++) System.out.println(r.randomInt(100));
+    /**
+     * Test class:  Print 10 random integers.
+     *
+     * @param args Unused.
+     */
+    public static void main(String[] args) {
+      Randomizer r = new Randomizer(new java.util.Date().getTime());
+      for (int i = 0; i < 10; i++) {
+        System.out.println(r.randomInt(100));
       }
+    }
   }
 }
